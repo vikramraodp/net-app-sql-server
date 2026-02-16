@@ -1,0 +1,51 @@
+﻿name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Publish Binaries
+        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
+
+      - name: Create Zip of Binaries
+        shell: pwsh
+        run: |
+          Compress-Archive -Path ./publish/* -DestinationPath ./NetAppSqlServer-win-x64.zip
+
+      - name: Prepare Inno Setup Script
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          if (-not $version) { $version = "1.0.0" }
+          (Get-Content NetAppSqlServer.iss) -replace '\$\{VERSION\}', $version | Set-Content NetAppSqlServer.iss
+
+      - name: Compile Installer
+        run: iscc NetAppSqlServer.iss
+
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            NetAppSqlServer-win-x64.zip
+            installer/NetAppSqlServerInstaller.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -100,3 +100,9 @@ exit
 - `make run`: Builds and runs the application.
 - `make clean`: Removes build artifacts.
 - `make publish`: Publishes the application for release.
+
+## Releases
+
+This project uses GitHub Actions to automatically create releases when a new tag (e.g., `v1.0.0`) is pushed. Each release includes:
+- **NetAppSqlServerInstaller.exe**: A Windows installer.
+- **NetAppSqlServer-win-x64.zip**: A zip archive containing the binaries.
