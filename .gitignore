@@ -1,0 +1,21 @@
+﻿# Binaries
+bin/
+obj/
+local/
+
+# IDEs
+.idea/
+.vs/
+.vscode/
+*.swp
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+*.sln.DotSettings.user
+
+# Operating System
+Thumbs.db
+Desktop.ini

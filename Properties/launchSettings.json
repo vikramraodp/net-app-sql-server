@@ -1,0 +1,8 @@
+﻿{
+  "profiles": {
+    "NetAppSqlServer": {
+      "commandName": "Project",
+      "dotnetRunMessages": true
+    }
+  }
+}
